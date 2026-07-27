@@ -5,3 +5,6 @@ coverage
 .idea
 agent-platform/.venv
 agent-platform/*.db
+agent-platform/*.egg-info
+agent-platform/**/__pycache__
+agent-platform/**/*.pyc
