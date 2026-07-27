@@ -9,8 +9,9 @@ describe('job analysis', () => {
   })
 
   it('creates an approval-aware workflow', () => {
-    const plan = createProjectPlan('React and API design required.', 'frontend engineer')
+    const plan = createProjectPlan('React and API design required.', 'frontend engineer', 'https://example.com/job')
     expect(plan.milestones.filter((item) => item.approval)).toHaveLength(3)
     expect(plan.title).toContain('React')
+    expect(plan.sourceUrl).toBe('https://example.com/job')
   })
 })
