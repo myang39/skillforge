@@ -3,6 +3,7 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   { ignores: ['dist'] },
+  { files: ['server/**/*.js'], languageOptions: { globals: { AbortController: 'readonly', URL: 'readonly', clearTimeout: 'readonly', console: 'readonly', fetch: 'readonly', process: 'readonly', setTimeout: 'readonly' } } },
   js.configs.recommended,
   ...tseslint.configs.recommended,
 )
