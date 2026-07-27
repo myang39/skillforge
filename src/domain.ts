@@ -27,7 +27,7 @@ export function extractRequirements(jobPost: string): Requirement[] {
     .map(([, skill]) => ({
       skill,
       evidence: evidenceFor(skill),
-      priority: new RegExp(`required|must|required qualifications|${skill}`, 'i').test(jobPost) ? 'must' : 'plus' as const,
+      priority: (new RegExp(`required|must|required qualifications|${skill}`, 'i').test(jobPost) ? 'must' : 'plus') as Requirement['priority'],
     }))
 
   return found.length ? uniqueBySkill(found) : [
