@@ -53,6 +53,40 @@ export function createProjectPlan(jobPost: string): ProjectPlan {
   }
 }
 
+export function createCodexPrompt(jobPost: string, plan: ProjectPlan) {
+  const skills = plan.requirements.map((item) => `- ${item.skill}: ${item.evidence}`).join('\n')
+  return `You are the lead engineer for a portfolio project derived from this job post. Work in the current repository and create a production-shaped implementation that the candidate can explain in an interview.
+
+## Job post
+${jobPost}
+
+## Goal
+Build: ${plan.title}
+${plan.summary}
+
+## Skills that need evidence
+${skills}
+
+## Required workflow
+1. Inspect the repository and propose a concise implementation plan before editing.
+2. Create the product/design artifacts needed to make the project coherent: a short PRD, user flow, architecture notes, and an evidence matrix.
+3. Implement the smallest complete vertical slice first. Keep the code typed, accessible, and easy to review.
+4. Add or update tests. Run lint, tests, and the production build; fix failures.
+5. Review the final diff for correctness, security, and missing job-skill evidence.
+6. Update the README with setup, verification steps, and a short interview/demo narrative.
+
+## Boundaries
+- Do not publish a repository, merge protected branches, or deploy to production without asking first.
+- Prefer a local preview or draft deployment plan over external actions.
+- When a product decision is material, present the options and ask for approval.
+
+## Done when
+- The project runs locally.
+- Relevant checks pass.
+- Every required skill above has a concrete artifact or documented gap.
+- The README explains what was built, how to verify it, and how it maps to the job post.`
+}
+
 function evidenceFor(skill: string) {
   const map: Record<string, string> = {
     React: 'Responsive UI components and interaction tests', TypeScript: 'Strict types and typed API boundaries', 'Node.js': 'Service layer and validated API endpoints', Python: 'Backend service with tests', SQL: 'Schema, migrations, and data access tests', 'Cloud deployment': 'Preview URL and deployment runbook', Containers: 'Reproducible container build', 'CI/CD': 'GitHub Actions pipeline', Testing: 'Unit and integration test suite', 'Product design': 'User flow and documented design decisions', 'API design': 'OpenAPI contract and error model',

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createProjectPlan } from './domain'
+import { createCodexPrompt, createProjectPlan } from './domain'
 import './styles.css'
 
 const sample = `Senior Frontend Engineer\nRequired: React, TypeScript, API design, automated testing, and CI/CD. Experience shipping production features on cloud infrastructure is a plus. Collaborate closely with product and design.`
@@ -8,7 +8,9 @@ const sample = `Senior Frontend Engineer\nRequired: React, TypeScript, API desig
 function App() {
   const [jobPost, setJobPost] = useState(sample)
   const [started, setStarted] = useState(false)
+  const [copied, setCopied] = useState(false)
   const plan = useMemo(() => createProjectPlan(jobPost), [jobPost])
+  const codexPrompt = useMemo(() => createCodexPrompt(jobPost, plan), [jobPost, plan])
 
   return <main>
     <header><p className="eyebrow">SKILLFORGE / MVP</p><h1>Turn a job post into proof of work.</h1><p className="lede">An approval-aware multi-agent studio that teaches while it ships.</p></header>
@@ -23,6 +25,7 @@ function App() {
         <article><h3>Guided delivery</h3>{plan.milestones.map((item, index) => <div className="milestone" key={item.title}><span>{index + 1}</span><div><b>{item.title}</b><p>{item.owner}</p><small>{item.outcome}</small>{item.approval && <em>Needs your approval</em>}</div></div>)}</article>
       </div>
       <aside><b>Production rule</b><p>Agents may create local branches, tests, and preview artifacts. Publishing a repository, merging protected branches, or deploying to production always requires your explicit approval.</p></aside>
+      <section className="codex-handoff"><div><p className="eyebrow">CODEX HANDOFF</p><h3>Start this project in Codex</h3><p>Copy this prompt into a new Codex task in the project folder where you want the portfolio project built.</p></div><button onClick={async () => { await navigator.clipboard.writeText(codexPrompt); setCopied(true) }}>{copied ? 'Copied' : 'Copy Codex prompt'}</button><textarea aria-label="Codex project prompt" readOnly value={codexPrompt} /></section>
     </section>}
   </main>
 }
