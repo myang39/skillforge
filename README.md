@@ -17,6 +17,38 @@ npm install
 npm run dev
 ```
 
+## Agent Reliability Gateway
+
+`agent-platform/` is a production-shaped Python reference service for the Agent Platform Engineer job path. It demonstrates a safe, inspectable agent lifecycle: accept a goal, plan an allowlisted tool sequence, act, persist observations, and save an evaluation result.
+
+```bash
+cd agent-platform
+python3 -m venv .venv
+.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/uvicorn app.main:app --reload
+```
+
+Open `http://127.0.0.1:8000/docs` for the OpenAPI UI. Create a run with:
+
+```bash
+curl -X POST http://127.0.0.1:8000/v1/runs \
+  -H 'Content-Type: application/json' \
+  -d '{"goal":"Draft a traceable agent response for an account support request"}'
+```
+
+Verify it with:
+
+```bash
+npm run check
+cd agent-platform && .venv/bin/ruff check . && .venv/bin/pytest
+```
+
+See [the product requirements](docs/agent-platform-prd.md), [architecture](docs/agent-platform-architecture.md), and [evidence matrix](docs/evidence-matrix.md).
+
+### Interview demo narrative
+
+“I built a small Agent Reliability Gateway rather than a chat wrapper. It models the plan/act/observe lifecycle, limits execution to an explicit tool registry, persists ordered traces for operators, and evaluates every completed run. The same seams allow a production model or MCP adapter to replace the deterministic tools without changing the API contract. I packaged the service for Docker and verify it in CI.”
+
 ## Product direction
 
 The next slice is a GitHub App integration that turns approved milestones into issues and branches, then has dedicated product, design, builder, reviewer, QA, and DevOps agents generate reviewable artifacts.
