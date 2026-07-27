@@ -15,6 +15,7 @@ def test_create_and_read_trace(tmp_path, monkeypatch):
     )
     Base.metadata.create_all(engine)
     monkeypatch.setattr(main, "SessionLocal", sessionmaker(bind=engine, expire_on_commit=False))
+    monkeypatch.setattr(main, "DEFAULT_OLLAMA_MODEL", "")
 
     with TestClient(app) as client:
         created = client.post("/v1/runs", json={"goal": "Create a reliable agent execution trace"})

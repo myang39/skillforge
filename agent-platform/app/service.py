@@ -18,9 +18,11 @@ class RunView:
 
 
 class AgentService:
-    def __init__(self, session: Session, tools: ToolRegistry | None = None) -> None:
+    def __init__(
+        self, session: Session, tools: ToolRegistry | None = None, ollama_model: str | None = None
+    ) -> None:
         self.session = session
-        self.tools = tools or ToolRegistry()
+        self.tools = tools or ToolRegistry(ollama_model=ollama_model)
 
     def create_run(self, goal: str) -> RunView:
         run = AgentRun(goal=goal, status="running", output="")

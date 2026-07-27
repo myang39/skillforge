@@ -8,7 +8,7 @@ FastAPI API → AgentService → ToolRegistry
                   └─ Evaluator → trace and output quality signals
 ```
 
-`AgentService` owns the plan/act/observe state machine. Tools are injected through `ToolRegistry`, so an adapter for an LLM SDK, MCP client, or remote tool can be added without changing the HTTP layer. The MVP registers only local, side-effect-free tools.
+`AgentService` owns the plan/act/observe state machine. Tools are injected through `ToolRegistry`, so an adapter for an LLM SDK, MCP client, or remote tool can be added without changing the HTTP layer. The response-drafting tool calls Ollama's local `/api/chat` endpoint and records model metadata in the trace; it falls back explicitly when the local model is unavailable.
 
 The database records `agent_runs`, ordered `trace_events`, and `evaluations`. The schema is created through versioned SQL files in `agent-platform/migrations/`; this keeps the migration path visible and portable to PostgreSQL.
 

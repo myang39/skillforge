@@ -1,3 +1,4 @@
+import os
 from collections.abc import Generator
 from contextlib import asynccontextmanager
 from uuid import UUID
@@ -11,8 +12,10 @@ from app.schemas import CreateRunRequest, EvaluationResponse, RunResponse, Trace
 from app.service import AgentService, RunView
 
 DATABASE_URL = "sqlite:///./agent_gateway.db"
+DEFAULT_OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gpt-oss")
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -59,7 +62,8 @@ def health() -> dict[str, str]:
 
 @app.post("/v1/runs", response_model=RunResponse, status_code=status.HTTP_201_CREATED)
 def create_run(request: CreateRunRequest, session: Session = Depends(get_session)) -> RunResponse:
-    return serialize(AgentService(session).create_run(request.goal))
+    service = AgentService(session, ollama_model=request.model or DEFAULT_OLLAMA_MODEL)
+    return serialize(service.create_run(request.goal))
 
 
 @app.get("/v1/runs/{run_id}", response_model=RunResponse)

@@ -21,6 +21,8 @@ npm run dev
 
 `agent-platform/` is a production-shaped Python reference service for the Agent Platform Engineer job path. It demonstrates a safe, inspectable agent lifecycle: accept a goal, plan an allowlisted tool sequence, act, persist observations, and save an evaluation result.
 
+When Ollama is running locally, the response-drafting tool calls its `/api/chat` endpoint. The service defaults to `gpt-oss`; select another locally installed model per request with the optional `model` field, or set `OLLAMA_MODEL` before starting the service.
+
 ```bash
 cd agent-platform
 python3 -m venv .venv
@@ -33,7 +35,7 @@ Open `http://127.0.0.1:8000/docs` for the OpenAPI UI. Create a run with:
 ```bash
 curl -X POST http://127.0.0.1:8000/v1/runs \
   -H 'Content-Type: application/json' \
-  -d '{"goal":"Draft a traceable agent response for an account support request"}'
+  -d '{"goal":"Draft a traceable agent response for an account support request", "model":"llama3.1"}'
 ```
 
 Verify it with:
