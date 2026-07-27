@@ -4,10 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:client": "vite",
-    "dev:server": "node server/index.js",
-    "start": "node server/index.js",
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -18,14 +15,12 @@
     "@vitejs/plugin-react": "latest",
     "vite": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "express": "latest"
+    "react-dom": "latest"
   },
   "devDependencies": {
     "@eslint/js": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "concurrently": "latest",
     "eslint": "latest",
     "typescript": "latest",
     "typescript-eslint": "latest",

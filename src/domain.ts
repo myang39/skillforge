@@ -3,7 +3,6 @@ export type Requirement = { skill: string; evidence: string; priority: 'must' | 
 export type ProjectPlan = {
   title: string
   summary: string
-  sourceUrl?: string
   requirements: Requirement[]
   milestones: { title: string; owner: string; outcome: string; approval: boolean }[]
 }
@@ -37,13 +36,12 @@ export function extractRequirements(jobPost: string): Requirement[] {
   ]
 }
 
-export function createProjectPlan(jobPost: string, candidateGoal: string, sourceUrl?: string): ProjectPlan {
+export function createProjectPlan(jobPost: string): ProjectPlan {
   const requirements = extractRequirements(jobPost)
   const primary = requirements.find((item) => item.priority === 'must')?.skill ?? requirements[0].skill
   return {
     title: `${primary} Launchpad`,
-    summary: `A production-shaped project that proves ${requirements.map((item) => item.skill).join(', ')} while helping the candidate pursue: ${candidateGoal || 'this role'}.`,
-    sourceUrl,
+    summary: `A production-shaped project that proves ${requirements.map((item) => item.skill).join(', ')} through reviewable code, tests, CI, and deployment evidence.`,
     requirements,
     milestones: [
       { title: 'Define the proof of work', owner: 'Product & career coach', outcome: 'PRD, success metrics, and job-skill evidence matrix', approval: true },
